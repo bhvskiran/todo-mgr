@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 80px;
+  background-color: antiquewhite;
+}
+.btn {
+  border: neone;
+  padding: 5px;
+}
+
+.profile-pic {
+  height: 50px;
+  width: 50px;
+  border-radius: 25px;
+}
+
+.profile-pic-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.logOut-btn {
+  text-align: center;
+  align-items: center;
+}
+.intro-btn {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
