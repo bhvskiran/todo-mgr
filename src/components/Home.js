@@ -64,7 +64,7 @@ const Home = () => {
       }}
     >
       <div className="container">
-        <h1>LOGO</h1>
+        <h1>TODOs</h1>
 
         {user && (
           <Link to="/todos">
