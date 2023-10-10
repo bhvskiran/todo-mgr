@@ -1,12 +1,18 @@
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
+
 .container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 80px;
-  background-color: antiquewhite;
+  padding: 20px 60px;
+  background-color: teal;
 }
 .btn {
-  border: neone;
+  color: gray;
   padding: 5px;
 }
 
@@ -29,4 +35,30 @@
   border: none;
   background: transparent;
   box-shadow: none;
+  color: white;
+}
+.intro-btn:hover {
+  color: white;
+}
+.heading {
+  color: white;
+  font-family: Trajan Pro;
+  font-size: 48px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+}
+.i {
+  height: 50px;
+}
+/*  */
+
+.home-container {
+  height: 100vh;
+}
+.my-todos-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
