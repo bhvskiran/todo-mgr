@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Tooltip, Dropdown } from "antd";
 import "./styles.css";
 import { AppContext } from "../context/AppContext";
@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 const Header = () => {
   const [profileDropdown, setProfileDropDown] = useState(false);
   const { googleSignIn, user, logOut } = useContext(AppContext);
+  console.log(user?.accessToken);
 
   const items = [
     {
@@ -31,6 +32,23 @@ const Header = () => {
       disabled: true,
     },
   ];
+
+  useEffect(() => {
+    toGetUserData();
+  }, [user]);
+
+  const toGetUserData = async () => {
+    try {
+      await fetch("http://localhost:5000/api/user/getUser", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${user?.accessToken}`,
+        },
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   const handleGoogleSignIn = async (e) => {
     try {
