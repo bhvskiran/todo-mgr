@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 const Header = () => {
   const [profileDropdown, setProfileDropDown] = useState(false);
   const { googleSignIn, user, logOut } = useContext(AppContext);
-  console.log(user?.accessToken);
+  // console.log(user?.accessToken);
 
   const items = [
     {
