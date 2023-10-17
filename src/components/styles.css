@@ -62,3 +62,47 @@
   align-items: center;
   justify-content: center;
 }
+
+/* myTodo */
+.my-todos-body {
+  padding: 0px 40px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.my-modal {
+  display: flex;
+  flex-direction: column;
+}
+.input {
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 5px;
+}
+.input:focus {
+  outline: 1px solid #d2caca;
+  box-shadow: inset 2px 2px 0px gray;
+}
+.empty-div {
+  width: 200px;
+}
+.my-heading {
+  color: teal;
+}
+.new-todo-button {
+  width: 100px;
+}
+/* todo Table */
+
+.icon-btn {
+  background-color: transparent;
+  border: none;
+  margin: 10px;
+  cursor: pointer;
+  font-size: larger;
+  color: rgb(64, 114, 3);
+}
