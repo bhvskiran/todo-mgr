@@ -8,13 +8,13 @@ const TodoTable = (props) => {
   const columns = [
     {
       title: "Id",
-      dataIndex: "id",
-      key: "id",
+      dataIndex: "todo_id",
+      key: "todo_id",
     },
     {
       title: "Todo Name",
-      dataIndex: "user_name",
-      key: "user_name",
+      dataIndex: "todo_name",
+      key: "todo_name",
     },
     {
       title: "Todo Desc",
