@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button } from "antd";
@@ -6,12 +6,14 @@ import { Button } from "antd";
 import Header from "./Header";
 import CreateTodoModal from "./CreateTodoModal";
 import TodoTable from "./TodoTable";
-import { v4 as uuidv4 } from "uuid";
-import moment from "moment";
+// import { v4 as uuidv4 } from "uuid";
+// import moment from "moment";
 import EditTodo from "./EditTodo";
 import DeleteTodo from "./DeleteTodo";
+import { AppContext } from "../context/AppContext";
 
 const MyTodos = () => {
+  const { user } = useContext(AppContext);
   const [todoName, setTodoName] = useState("");
   const [todoDesc, setTodoDesc] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,107 +22,102 @@ const MyTodos = () => {
   const [selectedTodo, setSelectedTodo] = useState();
   // const [editTheTodo, setEditTodo] = useState("");
   // const [editDesc, setEditDesc] = useState("");
-  const [todosList, setTodosList] = useState([
-    {
-      id: 1,
-      user_name: "Bookworm",
-      todo_desc: "A lover of books.",
-      created_at: "2023-10-16 18:46:53 PST",
-    },
-    {
-      id: 2,
-      user_name: "Penmaster",
-      todo_desc: "A skilled writer.",
-      created_at: "2023-10-16 18:46:53 PST",
-    },
-    {
-      id: 3,
-      user_name: "Talker",
-      todo_desc: "Someone who is all talk and no action.",
-      created_at: "2023-10-16 18:46:53 PST",
-    },
-    {
-      id: 4,
-      user_name: "Techie",
-      todo_desc: "A person who is very interested in computers and technology.",
-      created_at: "2023-10-16 18:46:53 PST",
-    },
-    {
-      id: 5,
-      user_name: "Phone Fiend",
-      todo_desc: "Someone who is addicted to using their phone.",
-      created_at: "2023-10-16 18:46:53 PST",
-    },
-    {
-      id: 6,
-      user_name: "Couch Potato",
-      todo_desc:
-        "A lazy person who spends a lot of time sitting on the couch watching TV.",
-      created_at: "2023-10-16 18:46:53 PST",
-    },
-    {
-      id: 7,
-      user_name: "Gamer",
-      todo_desc:
-        "Someone who enjoys playing tabletop games, such as board games, card games, and role-playing games.",
-      created_at: "2023-10-16 18:46:53 PST",
-    },
-    {
-      id: 8,
-      user_name: "Seeker",
-      todo_desc: "A person who is always looking for new opportunities.",
-      created_at: "2023-10-16 18:46:53 PST",
-    },
-    {
-      id: 9,
-      user_name: "Curious George",
-      todo_desc:
-        "Someone who enjoys looking at other people's houses and yards.",
-      created_at: "2023-10-16 18:46:53 PST",
-    },
-    {
-      id: 10,
-      user_name: "Tea Lover",
-      todo_desc: "Someone who enjoys drinking tea.",
-      created_at: "2023-10-16 18:46:53 PST",
-    },
-    {
-      id: 11,
-      user_name: "Foodie",
-      todo_desc: "Someone who enjoys eating and trying new foods.",
-      created_at: "2023-10-16 18:46:53 PST",
-    },
-  ]);
+  const [todosList, setTodosList] = useState([]);
+
+  useEffect(() => {
+    // in place of componentdimount
+    toGetAllTodos();
+  }, []);
+
+  const toGetAllTodos = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/todo/all-todos", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${user?.accessToken}`,
+        },
+      });
+      const data = await response.json();
+      if (data?.total_count > 0) {
+        setTodosList(data?.records);
+      }
+    } catch (error) {
+      console.log(error?.message);
+    }
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const handleOk = () => {
-    const todoObj = {
-      id: uuidv4(),
-      user_name: todoName,
-      todo_desc: todoDesc,
-      created_at: moment().format(),
-    };
-    setTodosList([...todosList, todoObj]);
-    console.log(todoObj);
-    setTodoName("");
-    setTodoDesc("");
-    setIsModalOpen(false);
+  const handleOk = async () => {
+    try {
+      const payload = {
+        todoName: todoName,
+        todoDesc: todoDesc,
+      };
+      console.log(payload);
+      const response = await fetch("http://localhost:5000/api/todo/create", {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          Authorization: `Bearer ${user?.accessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      // const data = await response.json();
+      console.log("post data", response);
+
+      setTodoName("");
+      setTodoDesc("");
+      setIsModalOpen(false);
+      todosList.length = 0;
+      toGetAllTodos();
+    } catch (error) {
+      console.log(error?.message);
+    }
   };
 
-  const handleEditTodo = () => {
-    console.log("edit create btn is clicked");
+  const handleEditTodo = async () => {
+    try {
+      const payload = {
+        todoName: todoName,
+        todoDesc: todoDesc,
+      };
+      // console.log("edit Todo", payload, selectedTodo);
+      const response = await fetch(
+        `http://localhost:5000/api/todo/update-todo/${selectedTodo?.todo_id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify(payload),
+          headers: {
+            Authorization: `Bearer ${user?.accessToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      // const data = await response.json();
+      console.log("post data", response);
+
+      setTodoName("");
+      setTodoDesc("");
+      setIsEditOpen(false);
+      todosList.length = 0;
+      toGetAllTodos();
+    } catch (error) {
+      console.log(error?.message);
+    }
   };
 
   const editTodo = (obj) => {
-    setTodoName(obj?.user_name);
+    setSelectedTodo(obj);
+    setTodoName(obj?.todo_name);
     setTodoDesc(obj?.todo_desc);
     setIsEditOpen(true);
     console.log("edited Id no: ", obj?.id);
   };
 
   const handleEditCancel = () => {
+    setSelectedTodo();
     setTodoName("");
     setTodoDesc("");
     setIsEditOpen(false);
@@ -138,9 +135,27 @@ const MyTodos = () => {
     console.log("Deleted Id no: ", obj?.id);
   };
 
-  const handleDeleteTodo = () => {
-    console.log("clicked on delete todo");
-    setIsDeleteOpen(false);
+  const handleDeleteTodo = async () => {
+    try {
+      // console.log("edit Todo", payload, selectedTodo);
+      const response = await fetch(
+        `http://localhost:5000/api/todo/delete-todo/${selectedTodo?.todo_id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${user?.accessToken}`,
+          },
+        }
+      );
+      // const data = await response.json();
+      console.log("post data", response);
+
+      setIsDeleteOpen(false);
+      todosList.length = 0;
+      toGetAllTodos();
+    } catch (error) {
+      console.log(error?.message);
+    }
   };
 
   const handleDeleteCancel = () => {
