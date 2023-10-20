@@ -11,11 +11,13 @@ import TodoTable from "./TodoTable";
 import EditTodo from "./EditTodo";
 import DeleteTodo from "./DeleteTodo";
 import { AppContext } from "../context/AppContext";
+import CustomeLoader from "./CustomeLoader";
 
 const MyTodos = () => {
   const { user } = useContext(AppContext);
   const [todoName, setTodoName] = useState("");
   const [todoDesc, setTodoDesc] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -31,6 +33,7 @@ const MyTodos = () => {
 
   const toGetAllTodos = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch("http://localhost:5000/api/todo/all-todos", {
         method: "GET",
         headers: {
@@ -41,7 +44,9 @@ const MyTodos = () => {
       if (data?.total_count > 0) {
         setTodosList(data?.records);
       }
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.log(error?.message);
     }
   };
@@ -51,6 +56,7 @@ const MyTodos = () => {
   };
   const handleOk = async () => {
     try {
+      setIsLoading(true);
       const payload = {
         todoName: todoName,
         todoDesc: todoDesc,
@@ -79,6 +85,7 @@ const MyTodos = () => {
 
   const handleEditTodo = async () => {
     try {
+      setIsLoading(true);
       const payload = {
         todoName: todoName,
         todoDesc: todoDesc,
@@ -137,6 +144,7 @@ const MyTodos = () => {
 
   const handleDeleteTodo = async () => {
     try {
+      setIsLoading(true);
       // console.log("edit Todo", payload, selectedTodo);
       const response = await fetch(
         `http://localhost:5000/api/todo/delete-todo/${selectedTodo?.todo_id}`,
@@ -166,6 +174,7 @@ const MyTodos = () => {
   return (
     <div className="home-container">
       <Header />
+      <CustomeLoader visible={isLoading} />
       <div className="my-todos-body">
         <div className="empty-div"></div>
         <div className="my-heading">

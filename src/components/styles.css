@@ -104,5 +104,16 @@
   margin: 10px;
   cursor: pointer;
   font-size: larger;
-  color: rgb(64, 114, 3);
+  color: rgb(3, 101, 114);
+}
+/* Footer */
+
+.loader {
+  position: absolute;
+  height: 70vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
 }
