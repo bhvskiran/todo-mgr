@@ -2,6 +2,7 @@ import React from "react";
 import { Space, Table } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import moment from "moment";
+import Footer from "./Footer";
 
 const TodoTable = (props) => {
   const { todosList, editTodo, deleteTodo } = props;
@@ -47,6 +48,8 @@ const TodoTable = (props) => {
   return (
     <div>
       <Table columns={columns} dataSource={todosList} />
+
+      <Footer />
     </div>
   );
 };
